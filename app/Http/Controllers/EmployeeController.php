@@ -34,12 +34,12 @@ class EmployeeController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['reqquired', 'string', 'max:56', 'unique:users,name', 'regex:/^[a-zA-Z0-9\s]+$/'],
             'email' => 'required|email|unique:users,email,' . $employee->user_id,
             'password' => 'nullable|string|min:5|confirmed',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
+            'first_name' => 'required|string|max:56',
+            'last_name' => 'required|string|max:56',
+            'address' => 'required|string|max:56',
             'contact_number' => 'required|string|max:15',
             'sss_number' => 'required|string|max:20',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -91,12 +91,12 @@ class EmployeeController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:56', 'unique:users,name', 'regex:/^[a-zA-Z0-9\s]+$/'],
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:5|confirmed',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
+            'first_name' => 'required|string|max:56',
+            'last_name' => 'required|string|max:56',
+            'address' => 'required|string|max:56',
             'contact_number' => 'required|string|max:15',
             'sss_number' => 'required|string|max:20',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

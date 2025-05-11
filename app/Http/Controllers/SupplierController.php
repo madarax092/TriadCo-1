@@ -23,10 +23,10 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:suppliers,name',
-            'address' => 'required|string|max:255|unique:suppliers,address',
+            'name' => 'required|string|max:56|unique:suppliers,name',
+            'address' => 'required|string|max:56|unique:suppliers,address',
             'number' => 'required|string|max:15|unique:suppliers,number',
-            'contact_person' => 'required|string|max:255|unique:suppliers,contact_person',
+            'contact_person' => 'required|string|max:56|unique:suppliers,contact_person',
         ]);
         $lastSupplier = Supplier::latest('supplier_id')->first();
         $customId = $lastSupplier ? 'S' . str_pad(intval($lastSupplier->supplier_id) + 1, 3, '0', STR_PAD_LEFT) : 'S001';        
@@ -53,10 +53,10 @@ class SupplierController extends Controller
         $supplier = Supplier::where('supplier_id', $supplier_id)->firstOrFail();
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:suppliers,name,' . $supplier->supplier_id . ',supplier_id',
-            'address' => 'required|string|max:255|unique:suppliers,address,' . $supplier->supplier_id . ',supplier_id',
+            'name' => 'required|string|max:56|unique:suppliers,name,' . $supplier->supplier_id . ',supplier_id',
+            'address' => 'required|string|max:56|unique:suppliers,address,' . $supplier->supplier_id . ',supplier_id',
             'number' => 'required|string|max:15|unique:suppliers,number,' . $supplier->supplier_id . ',supplier_id',
-            'contact_person' => 'required|string|max:255|unique:suppliers,contact_person,' . $supplier->supplier_id . ',supplier_id',
+            'contact_person' => 'required|string|max:56|unique:suppliers,contact_person,' . $supplier->supplier_id . ',supplier_id',
         ]);
 
         $supplier->update($validated);

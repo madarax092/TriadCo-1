@@ -37,7 +37,7 @@ class RoomTypeController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:room_types,name,' . $id . ',roomtype_id',
+            'name' => 'required|string|max:56|unique:room_types,name,' . $id . ',roomtype_id',
         ]);
 
         $roomType = RoomType::findOrFail($id);

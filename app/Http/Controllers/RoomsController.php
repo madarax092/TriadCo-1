@@ -39,7 +39,7 @@ class RoomsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:rooms,name',
+            'name' => 'required|string|max:56|unique:rooms,name',
             'roomtype_id' => 'required|exists:room_types,roomtype_id',
         ]);
 
@@ -67,7 +67,7 @@ class RoomsController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:rooms,name,' . $id . ',room_id',
+            'name' => 'required|string|max:56|unique:rooms,name,' . $id . ',room_id',
             'roomtype_id' => 'required|exists:room_types,roomtype_id',
         ]);
 

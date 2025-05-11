@@ -37,7 +37,7 @@ class ItemCategoryController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:item_categories,name,' . $id . ',itemctgry_id',
+            'name' => 'required|string|max:110|unique:item_categories,name,' . $id . ',itemctgry_id',
         ]);
 
         $category = ItemCategory::findOrFail($id);

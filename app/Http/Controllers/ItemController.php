@@ -38,7 +38,7 @@ class ItemController extends Controller
     {
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:items,name',
+            'name' => 'required|string|max:110|unique:items,name',
             'category_id' => 'required|exists:item_categories,itemctgry_id',
             'price' => 'required|numeric|min:0',
         ]);
@@ -68,7 +68,7 @@ class ItemController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:items,name,' . $id . ',item_id',
+            'name' => 'required|string|max:110|unique:items,name,' . $id . ',item_id',
             'category_id' => 'required|exists:item_categories,itemctgry_id',
             'price' => 'required|numeric|min:0',
         ]);
