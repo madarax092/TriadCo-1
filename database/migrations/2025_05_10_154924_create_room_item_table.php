@@ -9,15 +9,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('room_item', function (Blueprint $table) {
-            $table->string('room_room_id'); 
-            $table->string('item_item_id'); 
-            $table->integer('quantity'); 
+            $table->string('room_id'); // Foreign key for rooms
+            $table->string('item_id'); // Foreign key for items (string type to match items table)
+            $table->integer('quantity'); // Quantity of items assigned to the room
             $table->timestamps();
 
-            $table->foreign('room_room_id')->references('room_id')->on('rooms')->onDelete('cascade');
-            $table->foreign('item_item_id')->references('item_id')->on('items')->onDelete('cascade');
+            // Foreign key constraints
+            $table->foreign('room_id')->references('room_id')->on('rooms')->onDelete('cascade');
+            $table->foreign('item_id')->references('item_id')->on('items')->onDelete('cascade');
 
-            $table->primary(['room_room_id', 'item_item_id']);
+            // Composite primary key
+            $table->primary(['room_id', 'item_id']);
         });
     }
 

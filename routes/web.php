@@ -7,6 +7,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\StockInController;
+use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\RoomTypeController;
@@ -42,7 +43,7 @@ Route::middleware('auth')->group(function () {
     
     // Inventory
     Route::get('/inventory', [ItemController::class, 'index'])->name('inventory.index'); 
-    Route::post('/inventory', [ItemController::class, 'store'])->name('inventory.store'); // Removed stockin_id
+    Route::post('/inventory', [ItemController::class, 'store'])->name('inventory.store'); 
     Route::get('/inventory/{id}/edit', [ItemController::class, 'edit'])->name('inventory.edit');
     Route::put('/inventory/{id}', [ItemController::class, 'update'])->name('inventory.update'); 
     Route::delete('/inventory/{id}', [ItemController::class, 'destroy'])->name('inventory.destroy'); 
@@ -51,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventory/item-categories/{id}/edit', [ItemCategoryController::class, 'edit'])->name('inventory.itemctgryedit');
     Route::put('/inventory/item-categories/{id}', [ItemCategoryController::class, 'update'])->name('inventory.itemctgry.update');
     Route::delete('/inventory/item-categories/{id}', [ItemCategoryController::class, 'destroy'])->name('inventory.itemctgry.destroy');
-    
+
     // Stock In 
     Route::get('/stock_in', [StockInController::class, 'index'])->name('stock_in.index');
     Route::get('/stock_in/create', [StockInController::class, 'create'])->name('stock_in.create');
@@ -60,10 +61,15 @@ Route::middleware('auth')->group(function () {
     Route::put('/stock_in/{id}', [StockInController::class, 'update'])->name('stock_in.update');
     Route::delete('/stock_in/{id}', [StockInController::class, 'destroy'])->name('stock_in.destroy');
 
+    // Stock Out
+    Route::get('/stock-out', [StockOutController::class, 'index'])->name('stock_out.index');
+    Route::post('/stock-out/finalize', [StockOutController::class, 'finalize'])->name('stock_out.finalize');
+    Route::post('/inventory/stock-out/{id}', [StockOutController::class, 'addToStockOut'])->name('stock_out.add');
+
     // Rooms
     Route::get('/rooms', [RoomsController::class, 'index'])->name('rooms.index'); 
     Route::post('/rooms', [RoomsController::class, 'store'])->name('rooms.store'); 
-    Route::post('/rooms/{id}/assign', [RoomsController::class, 'assign'])->name('rooms.assign');
+    Route::post('/rooms/{id}/assign', [RoomsController::class, 'assignItems'])->name('rooms.assign');
     Route::get('/rooms/{id}/edit', [RoomsController::class, 'edit'])->name('rooms.edit');
     Route::put('/rooms/{id}', [RoomsController::class, 'update'])->name('rooms.update'); 
     Route::delete('/rooms/{id}', [RoomsController::class, 'destroy'])->name('rooms.destroy'); 
@@ -73,6 +79,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms/type/{id}/edit', [RoomTypeController::class, 'edit'])->name('rooms.type.edit');
     Route::put('/rooms/type/{id}', [RoomTypeController::class, 'update'])->name('rooms.type.update'); 
     Route::delete('/rooms/type/{id}', [RoomTypeController::class, 'destroy'])->name('rooms.type.destroy');
+    Route::post('/rooms/{id}/return-item', [RoomsController::class, 'returnItem'])->name('rooms.returnItem');
     
     // Profile
     Route::get('/profile', [AuthController::class, 'viewProfile'])->name('profile.view');

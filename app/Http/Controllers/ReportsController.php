@@ -7,19 +7,17 @@ use App\Models\StockIn;
 use App\Models\Supplier;
 use App\Models\Item;
 use App\Models\Room;
+use App\Models\StockOut;
 use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
     public function index(Request $request)
     {
-        // Fetch the filter value from the request
         $filter = $request->input('filter');
 
-        // Base query for reports
         $query = Report::with('user')->orderBy('created_at', 'desc');
 
-        // Apply filter based on the selected option
         if ($filter == 'items') {
             $query->where('activity', 'like', 'Added new item:%')
                 ->orWhere('activity', 'like', 'Updated item:%')
@@ -32,19 +30,24 @@ class ReportsController extends Controller
             $query->where('activity', 'like', 'Added Stock-In record%')
                 ->orWhere('activity', 'like', 'Updated Stock-In record%')
                 ->orWhere('activity', 'like', 'Deleted Stock-In record%');
+        } elseif ($filter == 'stock_out') {
+            $query->where('activity', 'like', 'Stocked out item:%');
         }
 
-        // Paginate the filtered results
         $reports = $query->paginate(10);
 
-        // Calculate statistics
         $totalStockInThisMonth = StockIn::whereMonth('stockin_date', now()->month)
             ->whereYear('stockin_date', now()->year)
+            ->count();
+
+        $totalStockOutThisMonth = Report::where('activity', 'like', 'Stocked out item:%')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
             ->count();
 
         $totalSuppliers = Supplier::count();
         $totalItems = Item::count();
 
-        return view('reports.index', compact('reports', 'totalStockInThisMonth', 'totalSuppliers', 'totalItems'));
+        return view('reports.index', compact('reports', 'totalStockInThisMonth', 'totalStockOutThisMonth', 'totalSuppliers', 'totalItems'));
     }
 }

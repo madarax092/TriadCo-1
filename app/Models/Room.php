@@ -40,7 +40,7 @@ class Room extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'room_item')
+        return $this->belongsToMany(Item::class, 'room_item', 'room_id', 'item_id') // Corrected foreign keys
                     ->withPivot('quantity')
                     ->withTimestamps();
     }

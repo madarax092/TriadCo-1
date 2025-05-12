@@ -50,47 +50,40 @@
     </div>
 
     <!-- Assign Items Modal -->
-        <div class="supplier-modal hidden" id="assignItemsModal">
-            <div class="modal-content">
-                <div class="supplier-modal-header">
-                    Assign Items to this Room
-                </div>
-                <div class="modal-body">
-                    <form id="assign-items-form" action="{{ route('rooms.assign', ['id' => '__ROOM_ID__']) }}" method="POST">
-                        @csrf
-                        <div id="items-container">
-                            <!-- First Row -->
-                            <div class="row mb-3 align-items-center item-row">
-                                <div class="col-md-5">
-                                    <label for="item_id_0" class="form-label">Item:</label>
-                                    <select name="items[0][item_id]" id="item_id_0" class="form-select" required>
-                                        <option value="" disabled selected>Select Item from Inventory</option>
-                                        @foreach($inventoryItems as $item)
-                                            <option value="{{ $item->item_id }}" data-stock="{{ $item->in_stock }}">
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-5">
-                                    <label for="quantity_0" class="form-label">Quantity:</label>
-                                    <input type="number" name="items[0][quantity]" id="quantity_0" class="form-control quantity-input" min="1" placeholder="Enter quantity" required disabled>
-                                    <small class="text-danger d-none no-stock-message">No Stocks Available</small>
-                                </div>
-                                <div class="col-md-2 text-end">
-                                    <button type="button" class="btn btn-sm btn-success add-row-btn">+</button>
-                                </div>
-                            </div>
+    <div class="supplier-modal hidden" id="assignItemsModal">
+        <div class="modal-content">
+            <div class="supplier-modal-header">
+                Assign Items to this Room
+            </div>
+            <div class="modal-body">
+                <form id="assign-items-form" action="{{ route('rooms.assign', ['id' => '__ROOM_ID__']) }}" method="POST">
+                    @csrf
+                    <div id="items-container">
+                        <!-- First Row -->
+                        <div class="item-row">
+                            <label for="item_id_0" class="assign-item-form-label">Item:</label>
+                            <select name="items[0][item_id]" id="item_id_0" class="form-select item-select" required>
+                                <option value="" disabled selected>Select Item</option>
+                                @foreach($inventoryItems as $item)
+                                    <option value="{{ $item->item_id }}" data-stock="{{ $item->in_stock }}">
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <label for="quantity_0" class="assign-item-form-label">Qty:</label>
+                            <input type="number" name="items[0][quantity]" id="quantity_0" class="form-control quantity-input" min="1" placeholder="Qty" required disabled>
+                            <button type="button" class="btn btn-square btn-add-row">+</button>
                         </div>
-                        <!-- Confirm and Cancel Buttons -->
-                        <div class="d-flex justify-content-end gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">Confirm</button>
-                            <button type="button" class="btn btn-secondary" onclick="toggleModal('assignItemsModal', 'close')">Cancel</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <!-- Confirm and Cancel Buttons -->
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                        <button type="button" class="btn btn-secondary" onclick="toggleModal('assignItemsModal', 'close')">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
     <!-- Rooms Table -->
     <div class="glass-card glass-card-wide mx-auto">
@@ -152,8 +145,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script src="{{ asset('js/assign_items.js') }}"></script>
 @endsection

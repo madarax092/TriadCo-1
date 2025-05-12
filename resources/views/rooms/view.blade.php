@@ -65,7 +65,9 @@
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->pivot->quantity }}</td>
                             <td>
-                                <a href="#" class="btn btn-warning btn-sm">Return Item</a>
+                                <button type="button" class="btn btn-warning btn-sm" onclick="openReturnItemModal('{{ $item->item_id }}', {{ $item->pivot->quantity }})">
+                                    Return Item
+                                </button>
                             </td>
                         </tr>
                     @empty
@@ -75,6 +77,33 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Return Item Modal -->
+<div class="supplier-modal hidden" id="returnItemModal">
+    <div class="modal-content">
+        <div class="supplier-modal-header">
+            Return Item
+        </div>
+        <div class="modal-body">
+            <form action="{{ route('rooms.returnItem', ['id' => $room->room_id]) }}" method="POST">
+                @csrf
+                <input type="hidden" id="return_item_id" name="item_id">
+                <div class="mb-3">
+                    <label for="return_quantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="return_quantity" name="quantity" min="1" placeholder="Enter quantity to return" required>
+                </div>
+                <div class="mb-3">
+                    <label for="return_reason" class="form-label">Reason</label>
+                    <textarea class="form-control" id="return_reason" name="reason" rows="3" placeholder="Enter reason for return" required></textarea>
+                </div>
+                <div class="button-row">
+                    <button type="submit" class="btn-add">Confirm</button>
+                    <button type="button" class="btn-cancel" onclick="toggleModal('returnItemModal', 'close')">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

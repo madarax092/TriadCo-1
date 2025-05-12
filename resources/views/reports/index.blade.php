@@ -17,8 +17,8 @@
             <p>Total Stock-In This Month</p>
         </div>
         <div class="card">
-            <h3>Coming Soon</h3>
-            <p>Total Items Distributed to Rooms</p>
+            <h3>{{ $totalStockOutThisMonth }}</h3>
+            <p>Total Stock-Out This Month</p>
         </div>
         <div class="card">
             <h3>{{ $totalSuppliers }}</h3>
@@ -44,6 +44,7 @@
                                     <option value="items" {{ request('filter') == 'items' ? 'selected' : '' }}>Items Reports</option>
                                     <option value="suppliers" {{ request('filter') == 'suppliers' ? 'selected' : '' }}>Supplier Reports</option>
                                     <option value="stock_in" {{ request('filter') == 'stock_in' ? 'selected' : '' }}>Stock-In Reports</option>
+                                    <option value="stock_out" {{ request('filter') == 'stock_out' ? 'selected' : '' }}>Stock-Out Reports</option>
                                 </select>
                             </form>
                         </td>

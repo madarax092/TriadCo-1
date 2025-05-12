@@ -227,6 +227,94 @@
                 }
             }
         }
+
+        function toggleAssignItemsModal(roomId) {
+            const modal = document.getElementById('assignItemsModal');
+            const form = document.getElementById('assign-items-form');
+
+            // Update the form action with the room ID
+            form.action = `/rooms/${roomId}/assign`;
+
+            // Remove the 'hidden' class to display the modal
+            modal.classList.remove('hidden');
+            modal.classList.add('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const itemsContainer = document.getElementById('items-container');
+            let rowIndex = 1;
+
+            // Add Row
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-add-row')) {
+                e.preventDefault();
+
+                const newRow = document.createElement('div');
+                newRow.classList.add('item-row');
+                newRow.innerHTML = `
+                    <label for="item_id_${rowIndex}" class="assign-item-form-label">Item:</label>
+                    <select name="items[${rowIndex}][item_id]" id="item_id_${rowIndex}" class="form-select item-select" required>
+                        <option value="" disabled selected>Select Item</option>
+                        ${[...document.querySelectorAll('#item_id_0 option')].map(option => option.outerHTML).join('')}
+                    </select>
+                    <label for="quantity_${rowIndex}" class="assign-item-form-label">Qty:</label>
+                    <input type="number" name="items[${rowIndex}][quantity]" id="quantity_${rowIndex}" class="form-control quantity-input" min="1" placeholder="Qty" required disabled>
+                    <button type="button" class="btn btn-square btn-remove-row">-</button>
+                `;
+                itemsContainer.appendChild(newRow);
+                rowIndex++;
+            }
+        });
+
+        // Remove Row
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-remove-row')) {
+                e.preventDefault();
+                e.target.closest('.item-row').remove();
+            }
+        });
+
+            // Enable Quantity Input Based on Stock
+            document.addEventListener('change', (e) => {
+                if (e.target.tagName === 'SELECT' && e.target.classList.contains('form-select')) {
+                    const selectedOption = e.target.options[e.target.selectedIndex];
+                    const stock = selectedOption.getAttribute('data-stock');
+                    const quantityInput = e.target.closest('.item-row').querySelector('.quantity-input');
+                    const noStockMessage = e.target.closest('.item-row').querySelector('.no-stock-message');
+
+                    if (stock > 0) {
+                        quantityInput.disabled = false;
+                        quantityInput.max = stock;
+                        noStockMessage.classList.add('d-none');
+                    } else {
+                        quantityInput.disabled = true;
+                        quantityInput.value = '';
+                        noStockMessage.classList.remove('d-none');
+                    }
+                }
+            });
+        });
+
+        function openReturnItemModal(itemId, maxQuantity) {
+            document.getElementById('return_item_id').value = itemId;
+            document.getElementById('return_quantity').max = maxQuantity;
+            toggleModal('returnItemModal', 'open');
+        }
+
+        function openStockOutModal(itemId, itemName, maxQuantity) {
+            // Set the form action dynamically
+            const form = document.getElementById('stockOutForm');
+            form.action = `/inventory/stock-out/${itemId}`;
+
+            // Populate the modal fields
+            document.getElementById('stock_out_item_id').value = itemId;
+            document.getElementById('stock_out_item_name').value = itemName;
+            document.getElementById('stock_out_quantity').max = maxQuantity;
+
+            // Open the modal
+            toggleModal('stockOutModal', 'open');
+        }
+        
     </script>
 </body>
 

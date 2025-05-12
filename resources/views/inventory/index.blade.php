@@ -53,6 +53,33 @@
         </div>
     </div>
 
+    <!-- Stock-Out Modal -->
+    <div class="supplier-modal hidden" id="stockOutModal">
+        <div class="modal-content">
+            <div class="supplier-modal-header">
+                Stock Out Item
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" id="stockOutForm">
+                    @csrf
+                    <input type="hidden" id="stock_out_item_id" name="item_id">
+                    <div class="mb-3">
+                        <label for="stock_out_item_name" class="form-label">Item Name</label>
+                        <input type="text" class="form-control" id="stock_out_item_name" name="item_name" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stock_out_quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="stock_out_quantity" name="quantity" min="1" required>
+                    </div>
+                    <div class="button-row">
+                        <button type="submit" class="btn-add">Move to Stock-Out Cart</button>
+                        <button type="button" class="btn-cancel" onclick="toggleModal('stockOutModal', 'close')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Items Table -->
     <div class="glass-card glass-card-wide mx-auto">
         <div class="table-responsive mt-2">
@@ -123,8 +150,45 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script src="{{ asset('js/inventory.js') }}"></script>
+<br>
+    <button class="btn btn-black w-100 h-25" onclick="window.location.href='{{ route('stock_out.index') }}'">
+        STOCK-OUT CART
+    </button>
+<div class="glass-card glass-card-wide mx-auto mt-4">
+    <h2 class=>Returned Items</h2>
+    <div class="table-responsive mt-2">
+        <table class="table table-bordered table-striped align-middle supplier-table">
+            <thead class="table-light">
+                <tr>
+                    <th>Returned Item Name</th>
+                    <th>Quantity</th>
+                    <th>Reason</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($returnedItems as $returnedItem)
+                    <tr>
+                        <td>{{ $returnedItem->item->name }}</td>
+                        <td>{{ $returnedItem->quantity }}</td>
+                        <td style="width: 50%;">{{ $returnedItem->reason }}</td>
+                        <td> 
+                            <div class="d-flex gap-2">
+                                <form action="{{ route('stock_out.add', ['id' => $returnedItem->item_id]) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="quantity" value="{{ $returnedItem->quantity }}">
+                                    <button type="submit" class="btn btn-sm btn-black">Move to Stock-Out</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">No returned items found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection
